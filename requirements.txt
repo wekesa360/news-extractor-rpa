@@ -1,0 +1,3 @@
+rpaframework
+pyyaml
+requests
