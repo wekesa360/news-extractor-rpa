@@ -1,0 +1,13 @@
+tasks:
+  Main:
+    robotTaskName: NewsExtractorProcess
+    entry: news_extractor_process.py
+
+condaConfigFile: conda.yaml
+artifactsDir: output
+PATH:
+ - .
+PYTHONPATH:
+  - .
+ignoreFiles:
+  - .gitignore
