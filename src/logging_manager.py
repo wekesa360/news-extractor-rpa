@@ -14,7 +14,7 @@ class LoggingManager:
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
         file_handler.setFormatter(formatter)
 
-        set.logger.addHandler(file_handler)
+        self.logger.addHandler(file_handler)
     
     def log_info(self, message):
         self.logger.info(message)

@@ -8,7 +8,7 @@ class Article:
     title: str
     date: datetime
     description: str
-    image_filename: str
+    image_url: str
     search_phrase_count: int = 0
     contains_money: bool = False
 

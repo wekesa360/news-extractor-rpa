@@ -1,4 +1,4 @@
-website_url: https://www.nytimes.com
+website_url: https://www.aljazeera.com
 search_phrase: Artificial Intelligence
 news_category: Technology
 num_months: 6
@@ -7,4 +7,4 @@ excel_file_name: nytimes_articles.xlsx
 log_file_path: logs/news_extractor.log
 log_level: INFO
 browser_name: chrome
-headless_mode: true
+headless_mode: false
