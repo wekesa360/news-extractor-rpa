@@ -7,8 +7,8 @@ environmentConfigs:
   - conda.yaml
 artifactsDir: output
 PATH:
- - .
+ - ..
 PYTHONPATH:
-  - .
+  - ..
 ignoreFiles:
   - .gitignore
