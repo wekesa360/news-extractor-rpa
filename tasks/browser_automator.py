@@ -2,7 +2,6 @@ from RPA.Browser.Selenium import Selenium
 from datetime import datetime
 from article import Article
 import time
-import re
 
 
 class BrowserAutomator:

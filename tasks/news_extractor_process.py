@@ -13,7 +13,7 @@ class NewsExtractorProcess:
     def __init__(self):
         # self.work_items = Items()
         # self.secrets = Secrets()
-        self.config_manager = ConfigManager("config/config.yaml")
+        self.config_manager = ConfigManager("config.yaml")
         self.logging_manager = LoggingManager("logs/news_extractor.log")
         self.browser_automator = BrowserAutomator(self.logging_manager)
         self.image_downloader = ImageDownloader("output/images", self.logging_manager)
