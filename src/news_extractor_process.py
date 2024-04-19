@@ -45,6 +45,7 @@ class NewsExtractorProcess:
             None
         """
         try:
+            self.logging_manager.log_info("Starting news extraction process.")
             # config_data = self.work_items.get_input_work_item()
             website_url = self.config_manager.get_config_value("website_url")
             search_phrase = self.config_manager.get_config_value("search_phrase")
@@ -56,7 +57,7 @@ class NewsExtractorProcess:
             self.browser_automator.enter_search_phrase(search_phrase)
             self.browser_automator.find_article_elements()
             article_count = self.browser_automator.count_article_results()
-            print(f"Found {article_count} articles")
+            self.logging_manager.log_info(f"Found {article_count} articles")
             time.sleep(2)
 
             articles = []

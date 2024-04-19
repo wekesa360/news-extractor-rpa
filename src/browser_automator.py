@@ -119,12 +119,6 @@ class BrowserAutomator:
             category_found = False
             if category_item.text.strip().lower() == category.lower():
                 category_found = True
-            if not category_found:
-                print(
-                    f"The category is: {category_item.text.strip().lower()}",
-                    f"but what we are looking for is: {category.lower()}",
-                )
-                self.logging_manager.log_warning(f"Category '{category}' not found. Saving all news articles.")
             return category_found
 
         except Exception as e:
@@ -160,17 +154,14 @@ class BrowserAutomator:
             the extracted data, or None if the article doesn't have a title.
         """
         try:
-            # Wait for the article element to be present
             article_xpath = f'//li[@data-testid="search-bodega-result"][{article_no}]'
             self.browser.wait_until_page_contains_element(article_xpath, timeout=10)
 
-            # Construct dynamic XPaths based on article_no
             title_xpath = f"{article_xpath}//div/div/div/a/h4"
             date_xpath = f'{article_xpath}//div/span[@data-testid="todays-date"]'
             description_xpath = f"{article_xpath}//div/div/div/a/p[1]"
             image_xpath = f"{article_xpath}//div/div/figure/div/img"
 
-            # Check if the title element exists
             if not self.browser.find_elements(title_xpath):
                 self.logging_manager.log_warning(
                     f"Skipping article {article_no} as it does not have a title."
