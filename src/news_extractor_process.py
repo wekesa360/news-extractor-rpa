@@ -22,6 +22,28 @@ class NewsExtractorProcess:
         )
 
     def run(self):
+        """
+        Executes the news extraction process.
+
+        This method performs the following steps:
+        1. Retrieves the configuration values for website URL, search phrase, news category, and number of months.
+        2. Opens the website using the browser automator.
+        3. Navigates to the specified URL.
+        4. Enters the search phrase into the search field.
+        5. Finds the elements containing the articles.
+        6. Counts the number of articles found.
+        7. Iterates over each article and extracts its data.
+        8. Filters the articles based on the news category and date range.
+        9. Updates the search phrase count and checks if the article contains money.
+        10. Downloads the article image.
+        11. Writes the extracted article data to an Excel file.
+        12. Closes the browser.
+
+        If any error occurs during the process, it is logged and the browser is closed.
+
+        Returns:
+            None
+        """
         try:
             # config_data = self.work_items.get_input_work_item()
             website_url = self.config_manager.get_config_value("website_url")
@@ -38,7 +60,7 @@ class NewsExtractorProcess:
             time.sleep(2)
 
             articles = []
-            for i in range(1, article_count+1):
+            for i in range(1, article_count + 1):
                 if self.browser_automator.check_news_category(news_category, i):
                     article = self.browser_automator.extract_article_data(i)
                     if article and self.is_article_within_date_range(
@@ -92,17 +114,39 @@ class NewsExtractorProcess:
             self.browser_automator.close_browser()
 
     def is_article_within_date_range(self, article_date, num_months):
+        """
+        Checks if the article's date is within the 
+        specified number of months from the current date.
+
+        Args:
+            article_date (datetime): The date of the article.
+            num_months (int): The number of months to check against.
+
+        Returns:
+            bool: True if the article's date is within 
+            the specified number of months, False otherwise.
+        """
         current_date = datetime.now()
         past_date = current_date - timedelta(days=num_months * 30)
         return article_date >= past_date
 
     def download_article_image(self, article):
+        """
+        Downloads the image for the given article and returns the filename.
+
+        Args:
+            article (Article): The article object containing the image URL.
+
+        Returns:
+            str: The filename of the downloaded image, 
+            or an empty string if an error occurred.
+        """
         image_url = article.image_url
-        filename = f"{article.title.replace(' ', '_')}_{article.date.strftime('%Y-%m-%d')}.jpg"
+        filename = f"""{article.title.replace(' ', '_').lower()}
+        _{article.date.strftime('%Y-%m-%d')}.jpg"""
         return self.image_downloader.download_image(image_url, filename)
 
 
 if __name__ == "__main__":
     news_extractor = NewsExtractorProcess()
     news_extractor.run()
- 
