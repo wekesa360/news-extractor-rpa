@@ -146,8 +146,3 @@ class NewsExtractorProcess:
         filename = f"""{article.title.replace(' ', '_').lower()}
         _{article.date.strftime('%Y-%m-%d')}.jpg"""
         return self.image_downloader.download_image(image_url, filename)
-
-
-if __name__ == "__main__":
-    news_extractor = NewsExtractorProcess()
-    news_extractor.run()
