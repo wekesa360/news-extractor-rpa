@@ -1,7 +1,7 @@
 tasks:
   Main:
     robotTaskName: NewsExtractorProcess
-    entry: main.py
+    entry: tasks/main.py
 
 environmentConfigs: 
   - conda.yaml
