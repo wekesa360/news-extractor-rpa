@@ -3,7 +3,8 @@ tasks:
     robotTaskName: NewsExtractorProcess
     entry: main.py
 
-environmentConfigs: conda.yaml
+environmentConfigs: 
+  - conda.yaml
 artifactsDir: output
 PATH:
  - .
