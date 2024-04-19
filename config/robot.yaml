@@ -1,13 +1,20 @@
 tasks:
-  Main:
-    robotTaskName: NewsExtractorProcess
-    entry: news_extractor_process.py
+  Run Task:
+    shell: python main.py
 
-condaConfigFile: conda.yaml
+environmentConfigs:
+  - environment_windows_amd64_freeze.yaml
+  - environment_linux_amd64_freeze.yaml
+  - environment_darwin_amd64_freeze.yaml
+  - conda.yaml
+
 artifactsDir: output
+
 PATH:
  - .
+
 PYTHONPATH:
   - .
+
 ignoreFiles:
   - .gitignore
