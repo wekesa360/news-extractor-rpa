@@ -1,4 +1,5 @@
 from RPA.Browser.Selenium import Selenium
+
 from datetime import datetime
 from .article import Article
 import time
@@ -12,7 +13,7 @@ class BrowserAutomator:
     def open_website(self):
         """Launches the available browser using the Selenium library."""
         try:
-            self.browser.open_available_browser()
+            self.browser.open_available_browser(headless=True)
         except Exception as e:
             self.logging_manager.log_error(f"Error opening website: {str(e)}")
 
@@ -24,7 +25,6 @@ class BrowserAutomator:
         """
         try:
             self.browser.go_to(url)
-            self.browser.maximize_browser_window()
         except Exception as e:
             self.logging_manager.log_error(f"Error going to URL: {str(e)}")
 
@@ -41,11 +41,11 @@ class BrowserAutomator:
             be entered in the search bar.
         """
         try:
-            search_icon = self.browser.find_element(
-            '//*[@id="app"]/div[2]/div[2]/header/section[1]/div[1]/div/button'
-            )
+            search_button_xpath = '//*[@id="app"]/div[2]/div[2]/header/section[1]/div[1]/div/button'
+            self.browser.wait_until_page_contains_element(search_button_xpath, timeout=15)
+            search_icon = self.browser.find_element(search_button_xpath)
             search_icon.click()
-            time.sleep(1)
+            time.sleep(2)
 
             search_bar = self.browser.find_element(
                 '//*[@id="search-input"]/form/div/input'
@@ -58,15 +58,14 @@ class BrowserAutomator:
                 '//*[@id="site-content"]/div/div[2]/div[2]/ol', timeout=10
             )
 
-            max_iterations = 10 
+            max_iterations = 20 
             iteration_count = 0
             while self.click_show_more_button():
                 time.sleep(2)
                 iteration_count += 1
                 if iteration_count >= max_iterations:
                     self.logging_manager.log_warning(
-                        f"""Maximum number of iterations ({max_iterations}) 
-                        reached for clicking 'Show More' button."""
+                        f"""Maximum number of iterations ({max_iterations}) reached for clicking 'Show More' button."""
                     )
                     break
         except Exception as e:
