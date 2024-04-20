@@ -58,7 +58,7 @@ class BrowserAutomator:
                 '//*[@id="site-content"]/div/div[2]/div[2]/ol', timeout=10
             )
 
-            max_iterations = 5 
+            max_iterations = 10 
             iteration_count = 0
             while self.click_show_more_button():
                 time.sleep(2)
@@ -107,7 +107,6 @@ class BrowserAutomator:
             bool: True if the category matches, False otherwise.
         """
         try:
-            # Wait for the article elements to be loaded
             article_xpath = f'//li[@data-testid="search-bodega-result"][{article_no}]'
             self.browser.wait_until_page_contains_element(
                 article_xpath, timeout=5

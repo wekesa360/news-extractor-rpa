@@ -13,9 +13,9 @@ class NewsExtractorProcess:
         # self.work_items = Items()
         # self.secrets = Secrets()
         self.config_manager = ConfigManager("config.yaml")
-        self.logging_manager = LoggingManager("logs/news_extractor.log")
+        self.logging_manager = LoggingManager("output/news_extractor.log")
         self.browser_automator = BrowserAutomator(self.logging_manager)
-        self.image_downloader = ImageDownloader("output/images", self.logging_manager)
+        self.image_downloader = ImageDownloader("output/", self.logging_manager)
         self.excel_exporter = ExcelExporter(
             "output/extracted_articles.xlsx", self.logging_manager
         )
