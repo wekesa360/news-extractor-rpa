@@ -3,7 +3,7 @@
 
 tasks:
   News Extractor:
-    shell: python -m robocorp.tasks run tasks.py -t main.py
+    shell: python main.py
 
 
 environmentConfigs:
