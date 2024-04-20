@@ -1,10 +1,9 @@
-from RPA.Robocloud.Items import Items
-from RPA.Robocloud.Secrets import Secrets
-from config_manager import ConfigManager
-from logging_manager import LoggingManager
-from browser_automator import BrowserAutomator
-from image_downloader import ImageDownloader
-from excel_exporter import ExcelExporter
+from robocorp import workitems
+from .config_manager import ConfigManager
+from .logging_manager import LoggingManager
+from .browser_automator import BrowserAutomator
+from .image_downloader import ImageDownloader
+from .excel_exporter import ExcelExporter
 from datetime import datetime, timedelta
 import time
 
@@ -21,7 +20,8 @@ class NewsExtractorProcess:
             "output/extracted_articles.xlsx", self.logging_manager
         )
 
-    def run(self):
+
+    def run_news_extractor(self):
         """
         Executes the news extraction process.
 
@@ -143,6 +143,5 @@ class NewsExtractorProcess:
             or an empty string if an error occurred.
         """
         image_url = article.image_url
-        filename = f"""{article.title.replace(' ', '_').lower()}
-        _{article.date.strftime('%Y-%m-%d')}.jpg"""
+        filename = f"""{article.title.replace(' ', '_').lower()}_{article.date.strftime('%Y-%m-%d')}.jpg"""
         return self.image_downloader.download_image(image_url, filename)
