@@ -13,3 +13,4 @@ dependencies:
     - rpaframework==28.5.1 
     - pyyaml==6.0.1
     - requests==2.31.0 
+    - robocorp==1.4.0  
