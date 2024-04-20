@@ -13,7 +13,7 @@ class BrowserAutomator:
     def open_website(self):
         """Launches the available browser using the Selenium library."""
         try:
-            self.browser.open_available_browser(headless=True)
+            self.browser.open_available_browser(headless=True, maximized=True)
         except Exception as e:
             self.logging_manager.log_error(f"Error opening website: {str(e)}")
 
@@ -44,11 +44,13 @@ class BrowserAutomator:
             search_button_xpath = '//*[@id="app"]/div[2]/div[2]/header/section[1]/div[1]/div/button'
             self.browser.wait_until_page_contains_element(search_button_xpath, timeout=20)
             search_icon = self.browser.find_element(search_button_xpath)
+            self.browser.scroll_element_into_view(search_icon)
             self.browser.wait_and_click_button(search_icon)
 
             search_bar_xpath = '//*[@id="search-input"]/form/div/input'
             self.browser.wait_until_page_contains_element(search_bar_xpath, timeout=10)
             search_bar = self.browser.find_element(search_bar_xpath)
+            self.scroll_element_into_view(search_bar)
             search_bar.send_keys(search_phrase)
 
             time.sleep(1)
@@ -84,6 +86,7 @@ class BrowserAutomator:
                 'css:button[data-testid="search-show-more-button"]'
             )
             if show_more_button.is_displayed():
+                self.browser.scroll_element_into_view(show_more_button)
                 show_more_button.click()
                 return True
             else:
