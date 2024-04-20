@@ -1,8 +1,6 @@
 from RPA.Browser.Selenium import Selenium
-
 from datetime import datetime
 from .article import Article
-import time
 
 
 class BrowserAutomator:
@@ -13,7 +11,7 @@ class BrowserAutomator:
     def open_website(self):
         """Launches the available browser using the Selenium library."""
         try:
-            self.browser.open_available_browser(headless=True, maximized=True)
+            self.browser.open_available_browser(headless=True, maximized=True, )
         except Exception as e:
             self.logging_manager.log_error(f"Error opening website: {str(e)}")
 
@@ -50,10 +48,10 @@ class BrowserAutomator:
             search_bar_xpath = '//*[@id="search-input"]/form/div/input'
             self.browser.wait_until_page_contains_element(search_bar_xpath, timeout=10)
             search_bar = self.browser.find_element(search_bar_xpath)
-            self.scroll_element_into_view(search_bar)
+            self.browser.scroll_element_into_view(search_bar)
             search_bar.send_keys(search_phrase)
 
-            time.sleep(1)
+            self.browser.set_browser_implicit_wait(1)
             search_bar.submit()
 
             self.browser.wait_until_page_contains_element(
@@ -63,11 +61,11 @@ class BrowserAutomator:
             max_iterations = 20 
             iteration_count = 0
             while self.click_show_more_button():
-                time.sleep(2)
+                self.browser.set_browser_implicit_wait(2)
                 iteration_count += 1
                 if iteration_count >= max_iterations:
                     self.logging_manager.log_warning(
-                        f"""Maximum number of iterations ({max_iterations}) reached for clicking 'Show More' button."""
+                        f"Maximum number of iterations ({max_iterations}) reached for clicking 'Show More' button."
                     )
                     break
         except Exception as e:
