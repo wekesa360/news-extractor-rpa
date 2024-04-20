@@ -42,15 +42,15 @@ class BrowserAutomator:
         """
         try:
             search_button_xpath = '//*[@id="app"]/div[2]/div[2]/header/section[1]/div[1]/div/button'
-            self.browser.wait_until_page_contains_element(search_button_xpath, timeout=15)
+            self.browser.wait_until_page_contains_element(search_button_xpath, timeout=20)
             search_icon = self.browser.find_element(search_button_xpath)
-            search_icon.click()
-            time.sleep(2)
+            self.browser.wait_and_click_button(search_icon)
 
-            search_bar = self.browser.find_element(
-                '//*[@id="search-input"]/form/div/input'
-            )
+            search_bar_xpath = '//*[@id="search-input"]/form/div/input'
+            self.browser.wait_until_page_contains_element(search_bar_xpath, timeout=10)
+            search_bar = self.browser.find_element(search_bar_xpath)
             search_bar.send_keys(search_phrase)
+
             time.sleep(1)
             search_bar.submit()
 
