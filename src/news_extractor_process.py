@@ -53,6 +53,16 @@ class NewsExtractorProcess:
                 search_phrase = item.payload.get("search_phrase")
                 news_category = item.payload.get("news_category")
                 num_months = item.payload.get("num_months")
+                required_values = [
+                    website_url,
+                    search_phrase,
+                    news_category,
+                    num_months,
+                ]
+                if not all(value for value in required_values):
+                    raise ValueError(
+                        "One or more required workitem values are missing or empty"
+                    )
             except Exception as e:
                 self.logging_manager.log_info(
                     f"Falling back to config values due to: {str(e)}"
