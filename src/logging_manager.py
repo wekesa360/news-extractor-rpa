@@ -15,7 +15,7 @@ class LoggingManager:
         self.logger.setLevel(logging.INFO)
         log_dir = os.path.dirname(log_file_path)
         os.makedirs(log_dir, exist_ok=True)
-        
+
         file_handler = logging.FileHandler(log_file_path)
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
         file_handler.setFormatter(formatter)

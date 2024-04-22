@@ -11,6 +11,7 @@ import time
 # Reads:  C_WORKITEM_INPUT_PATH=./rc_work_item_test_input.json for workitems testing
 # load_dotenv()
 
+
 class NewsExtractorProcess:
     def __init__(self):
         self.work_items = workitems.inputs.current
@@ -21,7 +22,6 @@ class NewsExtractorProcess:
         self.excel_exporter = ExcelExporter(
             "output/extracted_articles.xlsx", self.logging_manager
         )
-
 
     def run_news_extractor(self):
         """
@@ -54,7 +54,9 @@ class NewsExtractorProcess:
                 news_category = item.payload.get("news_category")
                 num_months = item.payload.get("num_months")
             except Exception as e:
-                self.logging_manager.log_info(f"Falling back to config values due to: {str(e)}")
+                self.logging_manager.log_info(
+                    f"Falling back to config values due to: {str(e)}"
+                )
                 website_url = self.config_manager.get_config_value("website_url")
                 search_phrase = self.config_manager.get_config_value("search_phrase")
                 news_category = self.config_manager.get_config_value("news_category")
@@ -69,6 +71,8 @@ class NewsExtractorProcess:
             time.sleep(2)
 
             articles = []
+            if article_count == 0:
+                raise Exception("No articles found on the page")
             for i in range(1, article_count + 1):
                 if self.browser_automator.check_news_category(news_category, i):
                     article = self.browser_automator.extract_article_data(i)
@@ -111,7 +115,6 @@ class NewsExtractorProcess:
                     )
             self.excel_exporter.save_workbook()
 
-            # self.work_items.create_output_work_item({"extracted_articles": "output/extracted_articles.xlsx"})
             self.logging_manager.log_info(
                 "News extraction process completed successfully"
             )
@@ -124,7 +127,7 @@ class NewsExtractorProcess:
 
     def is_article_within_date_range(self, article_date, num_months):
         """
-        Checks if the article's date is within the 
+        Checks if the article's date is within the
         specified number of months from the current date.
 
         Args:
@@ -132,7 +135,7 @@ class NewsExtractorProcess:
             num_months (int): The number of months to check against.
 
         Returns:
-            bool: True if the article's date is within 
+            bool: True if the article's date is within
             the specified number of months, False otherwise.
         """
         current_date = datetime.now()
@@ -147,7 +150,7 @@ class NewsExtractorProcess:
             article (Article): The article object containing the image URL.
 
         Returns:
-            str: The filename of the downloaded image, 
+            str: The filename of the downloaded image,
             or an empty string if an error occurred.
         """
         image_url = article.image_url

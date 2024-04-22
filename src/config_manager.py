@@ -7,7 +7,7 @@ class ConfigManager:
         Initializes a ConfigManager instance.
 
         Args:
-            config_file_path (str): The path to 
+            config_file_path (str): The path to
             the configuration file.
         """
         self.config_file_path = config_file_path
@@ -20,7 +20,7 @@ class ConfigManager:
         Loads the configuration from the specified file.
 
         Returns:
-            dict: The loaded configuration data, or 
+            dict: The loaded configuration data, or
             an empty dictionary if an error occurred.
         """
         try:
@@ -38,7 +38,7 @@ class ConfigManager:
             key (str): The key for which to retrieve the value.
 
         Returns:
-            Any: The value associated with the key, or 
+            Any: The value associated with the key, or
             None if the key is not found or an error occurred.
         """
         try:

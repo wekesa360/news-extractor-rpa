@@ -9,7 +9,7 @@ class ExcelExporter:
 
         Args:
             output_file_path (str): The path to the output Excel file.
-            logging_manager (LoggingManager): 
+            logging_manager (LoggingManager):
             An instance of the LoggingManager class.
         """
         self.output_file_path = output_file_path
