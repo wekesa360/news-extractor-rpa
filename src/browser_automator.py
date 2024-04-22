@@ -61,7 +61,6 @@ class BrowserAutomator:
             max_iterations = 20 
             iteration_count = 0
             while self.click_show_more_button():
-                self.browser.set_browser_implicit_wait(2)
                 iteration_count += 1
                 if iteration_count >= max_iterations:
                     self.logging_manager.log_warning(
@@ -85,6 +84,7 @@ class BrowserAutomator:
             )
             if show_more_button.is_displayed():
                 self.browser.scroll_element_into_view(show_more_button)
+                self.browser.set_browser_implicit_wait(3)
                 show_more_button.click()
                 return True
             else:
