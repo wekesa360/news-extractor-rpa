@@ -5,13 +5,15 @@ from .browser_automator import BrowserAutomator
 from .image_downloader import ImageDownloader
 from .excel_exporter import ExcelExporter
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 import time
 
+# Reads:  C_WORKITEM_INPUT_PATH=./rc_work_item_test_input.json for workitems testing
+# load_dotenv()
 
 class NewsExtractorProcess:
     def __init__(self):
-        # self.work_items = Items()
-        # self.secrets = Secrets()
+        self.work_items = workitems.inputs.current
         self.logging_manager = LoggingManager("output/news_extractor.log")
         self.browser_automator = BrowserAutomator(self.logging_manager)
         self.config_manager = ConfigManager("./config.yaml", self.logging_manager)
@@ -45,12 +47,18 @@ class NewsExtractorProcess:
             None
         """
         try:
-            self.logging_manager.log_info("Starting news extraction process.")
-            # config_data = self.work_items.get_input_work_item()
-            website_url = self.config_manager.get_config_value("website_url")
-            search_phrase = self.config_manager.get_config_value("search_phrase")
-            news_category = self.config_manager.get_config_value("news_category")
-            num_months = self.config_manager.get_config_value("num_months")
+            try:
+                item = workitems.inputs.current
+                website_url = item.payload.get("website_url")
+                search_phrase = item.payload.get("search_phrase")
+                news_category = item.payload.get("news_category")
+                num_months = item.payload.get("num_months")
+            except Exception as e:
+                self.logging_manager.log_info(f"Falling back to config values due to: {str(e)}")
+                website_url = self.config_manager.get_config_value("website_url")
+                search_phrase = self.config_manager.get_config_value("search_phrase")
+                news_category = self.config_manager.get_config_value("news_category")
+                num_months = self.config_manager.get_config_value("num_months")
 
             self.browser_automator.open_website()
             self.browser_automator.go_to_url(website_url)
