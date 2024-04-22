@@ -68,10 +68,10 @@ class NewsExtractorProcess:
                     f"Falling back to config values due to: {str(e)}"
                 )
                 try:
-                    website_url = self.config_manager.get_website_url()
-                    search_phrase = self.config_manager.get_search_phrase()
-                    news_category = self.config_manager.get_news_category()
-                    num_months = self.config_manager.get_num_months()
+                    website_url = self.config_manager.get_config_value("website_url")
+                    search_phrase = self.config_manager.get_config_value("search_phrase")
+                    news_category = self.config_manager.get_config_value("news_category")
+                    num_months = self.config_manager.get_config_value("num_months")
                 except Exception as e:
                     raise Exception(
                         f"Error reading configuration values: {str(e)}"
