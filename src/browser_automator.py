@@ -22,7 +22,8 @@ class BrowserAutomator:
             url (str): The URL to navigate to.
         """
         try:
-            self.browser.go_to(url)
+            self.logging_manager.log_info(f"The URL is: {str(url)}")
+            self.browser.go_to(str(url))
         except Exception as e:
             self.logging_manager.log_error(f"Error going to URL: {str(e)}")
 
