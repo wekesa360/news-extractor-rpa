@@ -13,7 +13,7 @@ class BrowserAutomator:
         """Launches the available browser using the Selenium library."""
         try:
             self.browser.open_available_browser(
-                headless=False,
+                headless=True,
                 maximized=True,
             )
         except Exception as e:

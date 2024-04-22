@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import time
 
-# Reads:  C_WORKITEM_INPUT_PATH=./rc_work_item_test_input.json for workitems testing
+# Reads from a .env file:  C_WORKITEM_INPUT_PATH=./rc_work_item_test_input.json for workitems testing
 # load_dotenv()
 
 
@@ -18,7 +18,7 @@ class NewsExtractorProcess:
         self.logging_manager = LoggingManager("output/news_extractor.log")
         self.browser_automator = BrowserAutomator(self.logging_manager)
         self.config_manager = ConfigManager("./config.yaml", self.logging_manager)
-        self.image_downloader = ImageDownloader("output/", self.logging_manager)
+        self.image_downloader = ImageDownloader("output/images", self.logging_manager)
         self.excel_exporter = ExcelExporter(
             "output/extracted_articles.xlsx", self.logging_manager
         )
@@ -57,10 +57,15 @@ class NewsExtractorProcess:
                 self.logging_manager.log_info(
                     f"Falling back to config values due to: {str(e)}"
                 )
-                website_url = self.config_manager.get_config_value("website_url")
-                search_phrase = self.config_manager.get_config_value("search_phrase")
-                news_category = self.config_manager.get_config_value("news_category")
-                num_months = self.config_manager.get_config_value("num_months")
+                try:
+                    website_url = self.config_manager.get_website_url()
+                    search_phrase = self.config_manager.get_search_phrase()
+                    news_category = self.config_manager.get_news_category()
+                    num_months = self.config_manager.get_num_months()
+                except Exception as e:
+                    raise Exception(
+                        f"Error reading configuration values: {str(e)}"
+                    ) from e
 
             self.browser_automator.open_website()
             self.browser_automator.go_to_url(website_url)
