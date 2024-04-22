@@ -1,6 +1,6 @@
 # News Extractor Process
 
-The News Extractor Process is a Python-based automation tool that extracts news articles from a website based on a given search phrase, news category, and date range. This process is designed to be used as part of a larger robotic process automation (RPA) workflow.
+The News Extractor Process is a Python-based automation tool that extracts articles from NewYork Times website based on a given search phrase, news category, and date range. This process is designed to be used as part of a larger robotic process automation (RPA) workflow.
 
 ## Features
 - Retrieves news articles from a specified website based on a search phrase, news category, and date range
@@ -25,15 +25,16 @@ The News Extractor Process is a Python-based automation tool that extracts news 
     ```
     RC_WORKITEM_INPUT_PATH=<path_to_input_file>
     ```
-This sets the path for the work item input file, which is used for testing purposes.
+    This sets the path for the work item input file, which is used for testing purposes.
+
 3. Create a `config.yaml` file in the project directory and add the following configuration values, a fallback for the work items input or default configs:
-```yaml
-website_url: https://www.example.com
-search_phrase: "example search phrase"
-news_category: "politics"
-num_months: 3
-```
-These values will be used as fallback options if the work item input does not contain the required information.
+    ```yaml
+    website_url: https://www.example.com
+    search_phrase: "example search phrase"
+    news_category: "politics"
+    num_months: 3
+    ```
+    These values will be used as fallback options if the work item input does not contain the required information.
 4. Run `main.py` to execute the news extraction process.
 
 **How It Works**
