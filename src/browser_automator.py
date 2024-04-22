@@ -40,6 +40,8 @@ class BrowserAutomator:
         """
         try:
             search_button_xpath = '//*[@id="app"]/div[2]/div[2]/header/section[1]/div[1]/div/button'
+            unkown_element = '//div[@class="fides-modal-overlay"]'
+            self.take_screenshot_and_save_elements(unkown_element)
             self.browser.wait_until_page_contains_element(search_button_xpath, timeout=20)
             search_icon = self.browser.find_element(search_button_xpath)
             self.browser.scroll_element_into_view(search_icon)
@@ -238,6 +240,23 @@ class BrowserAutomator:
         except Exception as e:
             self.logging_manager.log_error(f"Error finding article elements: {str(e)}")
             return []
+
+    def take_screenshot_and_save_elements(self, element):
+        try:
+            self.browser.screenshot(element ,f"output/page_view_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png")
+            elements = self.browser.find_elements('tag:*')
+            output_file = "output/tags.txt"
+
+            with open(output_file, "w") as f:
+                for element in elements:
+                    tag_name = element.tag_name
+                    element_id = element.get_attribute("id")
+                    element_class = element.get_attribute("class")
+                    f.write(f"Tag Name: {tag_name}\nID: {element_id}\nClass: {element_class}\n\n")
+            return True
+        except Exception as e:
+            self.logging_manager.log_error(f"Error viewing page elements: {str(e)}")
+            return False
 
     def close_browser(self):
         """Closes the browser."""
