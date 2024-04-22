@@ -1,6 +1,7 @@
 from RPA.Browser.Selenium import Selenium
 from datetime import datetime
 from .article import Article
+import time
 
 
 class BrowserAutomator:
@@ -11,7 +12,10 @@ class BrowserAutomator:
     def open_website(self):
         """Launches the available browser using the Selenium library."""
         try:
-            self.browser.open_available_browser(headless=True, maximized=True, )
+            self.browser.open_available_browser(
+                headless=False,
+                maximized=True,
+            )
         except Exception as e:
             self.logging_manager.log_error(f"Error opening website: {str(e)}")
 
@@ -22,28 +26,43 @@ class BrowserAutomator:
             url (str): The URL to navigate to.
         """
         try:
-            self.logging_manager.log_info(f"The URL is: {str(url)}")
-            self.browser.go_to(str(url))
+            self.browser.go_to(url)
         except Exception as e:
             self.logging_manager.log_error(f"Error going to URL: {str(e)}")
 
     def enter_search_phrase(self, search_phrase):
-        """Performs a search by entering the given search phrase 
+        """Performs a search by entering the given search phrase
         in the search bar and clicking the search icon.
 
-        It also waits for the initial search results to 
+        It also waits for the initial search results to
         appear and loads all available results by clicking the
         "Show More" button until it's no longer present.
 
         Args:
-            search_phrase (str): The search phrase to 
+            search_phrase (str): The search phrase to
             be entered in the search bar.
         """
         try:
-            search_button_xpath = '//*[@id="app"]/div[2]/div[2]/header/section[1]/div[1]/div/button'
-            unkown_element = '//div[@class="fides-modal-overlay"]'
-            self.take_screenshot_and_save_elements(unkown_element)
-            self.browser.wait_until_page_contains_element(search_button_xpath, timeout=20)
+            # Check for the "Accept all" button and click it
+            try:
+                accept_all_button_xpath = '//button[text()="Accept all"]'
+                self.browser.wait_until_page_contains_element(
+                    accept_all_button_xpath, timeout=10
+                )
+                accept_all_button = self.browser.find_element(accept_all_button_xpath)
+                accept_all_button.click()
+                self.logging_manager.log_info("Clicked 'Accept all' button.")
+            except Exception:
+                self.logging_manager.log_info(
+                    "No 'Accept all' button for managing preferences found."
+                )
+
+            search_button_xpath = (
+                '//*[@id="app"]/div[2]/div[2]/header/section[1]/div[1]/div/button'
+            )
+            self.browser.wait_until_page_contains_element(
+                search_button_xpath, timeout=10
+            )
             search_icon = self.browser.find_element(search_button_xpath)
             self.browser.scroll_element_into_view(search_icon)
             self.browser.wait_and_click_button(search_icon)
@@ -61,7 +80,7 @@ class BrowserAutomator:
                 '//*[@id="site-content"]/div/div[2]/div[2]/ol', timeout=10
             )
 
-            max_iterations = 20 
+            max_iterations = 20
             iteration_count = 0
             while self.click_show_more_button():
                 iteration_count += 1
@@ -71,9 +90,7 @@ class BrowserAutomator:
                     )
                     break
         except Exception as e:
-            self.logging_manager.log_error(
-                f"Error entering search phrase: {str(e)}"
-                )
+            self.logging_manager.log_error(f"Error entering search phrase: {str(e)}")
 
     def click_show_more_button(self):
         """Clicks the "Show More" button to load additional search results.
@@ -87,7 +104,7 @@ class BrowserAutomator:
             )
             if show_more_button.is_displayed():
                 self.browser.scroll_element_into_view(show_more_button)
-                self.browser.set_browser_implicit_wait(3)
+                time.sleep(2)
                 show_more_button.click()
                 return True
             else:
@@ -99,7 +116,7 @@ class BrowserAutomator:
             return False
 
     def check_news_category(self, category, article_no):
-        """Checks if the specified news category matches 
+        """Checks if the specified news category matches
         the category of the given article number.
 
         Args:
@@ -111,9 +128,7 @@ class BrowserAutomator:
         """
         try:
             article_xpath = f'//li[@data-testid="search-bodega-result"][{article_no}]'
-            self.browser.wait_until_page_contains_element(
-                article_xpath, timeout=5
-                )
+            self.browser.wait_until_page_contains_element(article_xpath, timeout=5)
 
             category_xpath = f"{article_xpath}//div/p"
             category_item = self.browser.find_element(category_xpath)
@@ -123,9 +138,7 @@ class BrowserAutomator:
             return category_found
 
         except Exception as e:
-            self.logging_manager.log_error(
-                f"Error selecting news category: {str(e)}"
-                )
+            self.logging_manager.log_error(f"Error selecting news category: {str(e)}")
             return False
 
     def count_article_results(self):
@@ -151,7 +164,7 @@ class BrowserAutomator:
             article_no (int): The article number (1-based index).
 
         Returns:
-            Article: An Article object containing 
+            Article: An Article object containing
             the extracted data, or None if the article doesn't have a title.
         """
         try:
@@ -241,23 +254,6 @@ class BrowserAutomator:
         except Exception as e:
             self.logging_manager.log_error(f"Error finding article elements: {str(e)}")
             return []
-
-    def take_screenshot_and_save_elements(self, element):
-        try:
-            self.browser.screenshot(element ,f"output/page_view_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png")
-            elements = self.browser.find_elements('tag:*')
-            output_file = "output/tags.txt"
-
-            with open(output_file, "w") as f:
-                for element in elements:
-                    tag_name = element.tag_name
-                    element_id = element.get_attribute("id")
-                    element_class = element.get_attribute("class")
-                    f.write(f"Tag Name: {tag_name}\nID: {element_id}\nClass: {element_class}\n\n")
-            return True
-        except Exception as e:
-            self.logging_manager.log_error(f"Error viewing page elements: {str(e)}")
-            return False
 
     def close_browser(self):
         """Closes the browser."""
