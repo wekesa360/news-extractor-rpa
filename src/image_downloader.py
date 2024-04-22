@@ -30,6 +30,9 @@ class ImageDownloader:
             response = requests.get(image_url)
             response.raise_for_status()
             file_path = os.path.join(self.output_directory, filename)
+            if os.path.exists(file_path):
+                self.logging_manager.log_info(f"Image already exists: {filename}")
+                return filename
             with open(file_path, "wb") as file:
                 file.write(response.content)
             self.logging_manager.log_info(f"Downloaded image: {filename}")
